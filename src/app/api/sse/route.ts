@@ -50,6 +50,14 @@ export async function GET(request: Request) {
             data: payload,
           })
         );
+
+        controller.enqueue(
+          encodeSseMessage({
+            event: "tick2", // 클라이언트에서 addEventListener("tick", ...) 로 받는다
+            id: String(count), // 마지막 수신 id 는 재연결 시 Last-Event-ID 헤더로 다시 전달된다
+            data: payload,
+          })
+        );
       };
 
       // 연결 직후 재연결 간격 힌트를 한 번 보내고, 곧바로 첫 tick 을 전송한다.

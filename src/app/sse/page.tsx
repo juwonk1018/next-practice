@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 // SSE용 클라이언트 페이지.
 // 브라우저 내장 EventSource 로 /api/sse 에 연결해서 서버가 푸시하는 이벤트를 화면에 쌓는다.
 // 직접 고쳐보며 실습하기 좋은 출발점이다 (이벤트 이름 바꾸기, JSON 파싱, 재연결 관찰 등).
@@ -29,30 +30,6 @@ export default function SsePracticePage() {
     setLogs([]);
   };
 
-  const connect = () => {
-    if (sourceRef.current) return;
-
-    const source = new EventSource(SSE_URL);
-    sourceRef.current = source;
-
-    source.onopen = () => setStatus("open");
-
-    // 서버가 `event: tick` 으로 보낸 메시지는 이렇게 이름으로 구독한다.
-    source.addEventListener("tick", (event) => {
-      appendLog(`tick → ${event.data}`);
-    });
-
-    // event 필드가 없는 기본 메시지는 onmessage 로 들어온다.
-    source.onmessage = (event) => {
-      appendLog(`message → ${event.data}`);
-    };
-
-    source.onerror = () => {
-      // EventSource 는 에러 시 자동 재연결을 시도한다. 닫혔는지 상태만 표시한다.
-      setStatus(source.readyState === EventSource.CLOSED ? "closed" : "open");
-    };
-  };
-
   const disconnect = () => {
     sourceRef.current?.close();
     sourceRef.current = null;
@@ -61,7 +38,31 @@ export default function SsePracticePage() {
 
   // 페이지 떠날 때 연결 정리.
   useEffect(() => {
-    return () => sourceRef.current?.close();
+
+    const eventStream = new EventSource(SSE_URL);
+
+    eventStream.onopen = () => {
+      setStatus("open")
+    }
+
+    eventStream.onmessage = (event) => {
+      // event 필드가 없는 기본 메시지
+    }
+
+    eventStream.addEventListener("tick2", function (event) {
+      const data =  JSON.parse(event.data);
+      appendLog(`현재시각 : ${data.time}, count: ${data.count}`)
+      
+    })
+
+    eventStream.onerror = () => {
+      setStatus(eventStream.readyState === EventSource.CLOSED ? 'closed' : 'open');
+    }
+
+    return () => { eventStream.close();
+      console.log("@cleanup")
+
+    };
   }, []);
 
   return (
@@ -72,9 +73,7 @@ export default function SsePracticePage() {
       </p>
 
       <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-        <button onClick={connect} disabled={status === "open"}>
-          연결
-        </button>
+        <Link href="/ssg">ssg로가기</Link>
         <button onClick={disconnect} disabled={status !== "open"}>
           끊기
         </button>
@@ -83,7 +82,7 @@ export default function SsePracticePage() {
 
       <ul style={{ listStyle: "none", padding: 0, lineHeight: 1.7 }}>
         {logs.map((log) => (
-          <li key={log.id}>{log.text} {log.id}</li>
+          <li key={log.id}>{log.id}. {log.text}</li>
         ))}
       </ul>
     </main>
