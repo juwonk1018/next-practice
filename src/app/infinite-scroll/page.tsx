@@ -85,7 +85,7 @@ export default function InfiniteScrollPracticePage() {
       // limit 을 5 로 줄여 sentinel 이 첫 화면부터 보이는 경우의 동작 확인 필요.
       // WARNING: 5로 줄이면, 그 다음의 fetch가 일어나지 않음.
       const result = await axios.get<GetItemsSuccess>("/api/items", {
-        params: { cursor: state.fetch.status === "idle" ? undefined : state.nextCursor, limit: 20 },
+        params: { cursor: state.nextCursor, limit: 20 },
       });
       const nextItems = result.data?.items;
       const nextCursor = result.data?.nextCursor ?? null;
@@ -110,13 +110,8 @@ export default function InfiniteScrollPracticePage() {
     entries: IntersectionObserverEntry[],
     observer: IntersectionObserver,
   ) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        if (entry.intersectionRatio >= 0.75 && state.fetch.status !== "loading") {
-          fetchItems();
-        }
-      }
-    });
+    if (state.fetch.status === "error") return;
+    if (entries.some((entry) => entry.isIntersecting)) fetchItems();
   };
 
   const observerOptions = {
