@@ -24,7 +24,7 @@ export const dynamic = "force-dynamic";
 const ARTIFICIAL_DELAY_MS = 800;
 
 // 0 보다 크게 올리면 그 확률로 500 에러를 반환한다. 에러 처리/재시도 실습할 때 0.3 정도로 바꿔볼 것.
-const FAILURE_RATE = 0.03;
+const FAILURE_RATE = 0.3;
 
 // 전체 데이터 개수. limit 20 기준 마지막 페이지가 딱 떨어지지 않도록 일부러 어중간한 수로 둔다.
 const TOTAL_ITEMS = 137;
