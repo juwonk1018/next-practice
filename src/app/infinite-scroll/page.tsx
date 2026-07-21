@@ -58,6 +58,8 @@ type Fetch =
   | { status: "error"; error: string | undefined }
   | { status: "success" };
 
+// 최초 호출: status가 idle이면서 nextCursor가 null
+// 리스트 마지막 호출: status가 success이면서 nextCursor가 null
 type ListState = {
   fetch: Fetch;
   data: Item[];
@@ -83,7 +85,7 @@ export default function InfiniteScrollPracticePage() {
       setState((state) => ({ ...state, fetch: { status: "loading" } }));
 
       // limit 을 5 로 줄여 sentinel 이 첫 화면부터 보이는 경우의 동작 확인 필요.
-      // WARNING: 5로 줄이면, 그 다음의 fetch가 일어나지 않음.
+      // TODO: 5로 줄이면, 그 다음의 fetch가 일어나지 않음.
       const result = await axios.get<GetItemsSuccess>("/api/items", {
         params: { cursor: state.nextCursor, limit: 20 },
       });
