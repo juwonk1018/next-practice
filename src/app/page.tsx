@@ -1,65 +1,49 @@
-import Image from "next/image";
+import Link from "next/link";
+import { getPracticeRoutes } from "@/lib/routes";
 
-export default function Home() {
+// 서버 컴포넌트라서 async 로 선언하고 fs 스캔 결과를 그대로 await 할 수 있다.
+// dynamic API 를 쓰지 않으므로 이 페이지는 빌드 타임에 프리렌더된다.
+export default async function Home() {
+  const routes = await getPracticeRoutes();
+
   return (
-    <div className="flex flex-1 flex-col items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex w-full max-w-3xl flex-1 flex-col items-center justify-between bg-white px-16 py-32 sm:items-start dark:bg-black">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl leading-10 font-semibold tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] md:w-[158px] dark:hover:bg-[#ccc]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] md:w-[158px] dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="mx-auto w-full max-w-2xl p-6">
+      <h1 className="text-2xl font-semibold tracking-tight">Next.js 실습</h1>
+      <p className="mt-2 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">
+        아래 목록은 <code className="font-mono">src/app</code> 을 훑어서 만든다. 새 폴더에{" "}
+        <code className="font-mono">page.tsx</code> 를 추가하면 여기에 자동으로 나타난다. 이름과
+        설명을 다듬고 싶으면 <code className="font-mono">src/lib/routes.ts</code> 의{" "}
+        <code className="font-mono">ROUTE_META</code> 에 등록하면 된다.
+      </p>
+
+      {routes.length === 0 ? (
+        <p className="mt-8 text-sm text-neutral-400 dark:text-neutral-500">
+          아직 실습 페이지가 없다. src/app 아래에 폴더를 만들고 page.tsx 를 추가해보자.
+        </p>
+      ) : (
+        <ul className="mt-8 flex flex-col gap-3">
+          {routes.map((route) => (
+            <li key={route.href}>
+              <Link
+                href={route.href}
+                className="block rounded-xl border border-black/10 bg-white p-4 shadow-sm transition-shadow hover:shadow-md dark:border-white/15 dark:bg-white/5"
+              >
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="font-medium">{route.label}</span>
+                  <code className="font-mono text-xs text-neutral-500 dark:text-neutral-400">
+                    {route.href}
+                  </code>
+                </div>
+                {route.description && (
+                  <p className="mt-1.5 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
+                    {route.description}
+                  </p>
+                )}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </main>
   );
 }
