@@ -39,7 +39,7 @@
 // - 빠르게 스크롤할 때 중복 요청이 없는지 Network 탭으로 검증
 
 import { GetItemsError, GetItemsSuccess, type Item } from "@/types/items";
-import { EndOfList, ErrorCard, ItemCard, SkeletonCard } from "./ui";
+import { EndOfList, ErrorCard, ItemCard, ObserverNotes, SkeletonCard } from "./ui";
 import { useEffect, useRef, useState } from "react";
 import axios, { isAxiosError } from "axios";
 
@@ -151,6 +151,9 @@ export default function InfiniteScrollPracticePage() {
       <p className="mt-1 mb-6 text-sm text-neutral-500 dark:text-neutral-400">
         엔드포인트: <code className="font-mono">/api/items?cursor=&amp;limit=20</code>
       </p>
+
+      {/* sentinel 을 첫 화면 밖으로 밀어내는 필러. 지우면 마운트 직후 바로 로드된다. */}
+      <ObserverNotes />
 
       <ul className="flex flex-col gap-3">
         {state.data && state.data.map((item) => <ItemCard key={item.id} item={item} />)}
