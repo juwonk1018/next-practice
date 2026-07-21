@@ -133,6 +133,7 @@ export default function InfiniteScrollPracticePage() {
     //    최신 값을 내뱉는 이유는 매 렌더링마다 해당 함수가 새로 호출되기 때문인데, callback은 그렇지 않음.
     // 따라서, observerRef를 써서 latestRef로 observerCallback을 유지하면 정상적으로 상태가 업데이트 됨.
 
+    // TODO: 범용적으로 쓸 수 있는 useIntersectionObsrever hook을 만들어보기.
     const observer = new IntersectionObserver((entries, observer) => {
       callbackRef.current(entries, observer);
     }, observerOptions);
