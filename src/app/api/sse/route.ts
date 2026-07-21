@@ -48,7 +48,7 @@ export async function GET(request: Request) {
             event: "tick", // 클라이언트에서 addEventListener("tick", ...) 로 받는다
             id: String(count), // 마지막 수신 id 는 재연결 시 Last-Event-ID 헤더로 다시 전달된다
             data: payload,
-          })
+          }),
         );
 
         controller.enqueue(
@@ -56,7 +56,7 @@ export async function GET(request: Request) {
             event: "tick2", // 클라이언트에서 addEventListener("tick", ...) 로 받는다
             id: String(count), // 마지막 수신 id 는 재연결 시 Last-Event-ID 헤더로 다시 전달된다
             data: payload,
-          })
+          }),
         );
       };
 

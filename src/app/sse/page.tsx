@@ -38,30 +38,28 @@ export default function SsePracticePage() {
 
   // 페이지 떠날 때 연결 정리.
   useEffect(() => {
-
     const eventStream = new EventSource(SSE_URL);
 
     eventStream.onopen = () => {
-      setStatus("open")
-    }
+      setStatus("open");
+    };
 
     eventStream.onmessage = (event) => {
       // event 필드가 없는 기본 메시지
-    }
+    };
 
     eventStream.addEventListener("tick2", function (event) {
-      const data =  JSON.parse(event.data);
-      appendLog(`현재시각 : ${data.time}, count: ${data.count}`)
-      
-    })
+      const data = JSON.parse(event.data);
+      appendLog(`현재시각 : ${data.time}, count: ${data.count}`);
+    });
 
     eventStream.onerror = () => {
-      setStatus(eventStream.readyState === EventSource.CLOSED ? 'closed' : 'open');
-    }
+      setStatus(eventStream.readyState === EventSource.CLOSED ? "closed" : "open");
+    };
 
-    return () => { eventStream.close();
-      console.log("@cleanup")
-
+    return () => {
+      eventStream.close();
+      console.log("@cleanup");
     };
   }, []);
 
@@ -82,7 +80,9 @@ export default function SsePracticePage() {
 
       <ul style={{ listStyle: "none", padding: 0, lineHeight: 1.7 }}>
         {logs.map((log) => (
-          <li key={log.id}>{log.id}. {log.text}</li>
+          <li key={log.id}>
+            {log.id}. {log.text}
+          </li>
         ))}
       </ul>
     </main>

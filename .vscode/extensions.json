@@ -1,0 +1,4 @@
+{
+  // 이 프로젝트를 열면 VS Code 가 설치를 권장하는 확장 목록.
+  "recommendations": ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint"]
+}

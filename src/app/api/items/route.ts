@@ -48,10 +48,9 @@ export async function GET(request: NextRequest) {
     // satisfies: 값의 추론 타입은 그대로 두면서 "계약에 맞는지"만 검사한다.
     // Response.json 은 아무 값이나 받기 때문에, 이 검사가 없으면
     // 계약과 어긋난 응답을 보내도 컴파일러가 잡아주지 못한다.
-    return Response.json(
-      { error: "일부러 발생시킨 서버 에러" } satisfies GetItemsError,
-      { status: 500 },
-    );
+    return Response.json({ error: "일부러 발생시킨 서버 에러" } satisfies GetItemsError, {
+      status: 500,
+    });
   }
 
   const searchParams = request.nextUrl.searchParams;
@@ -59,10 +58,9 @@ export async function GET(request: NextRequest) {
   const rawCursor = searchParams.get("cursor");
   const cursor = rawCursor === null ? 0 : Number(rawCursor);
   if (Number.isNaN(cursor) || cursor < 0) {
-    return Response.json(
-      { error: "cursor 는 0 이상의 숫자여야 합니다" } satisfies GetItemsError,
-      { status: 400 },
-    );
+    return Response.json({ error: "cursor 는 0 이상의 숫자여야 합니다" } satisfies GetItemsError, {
+      status: 400,
+    });
   }
 
   const rawLimit = searchParams.get("limit");
@@ -78,8 +76,7 @@ export async function GET(request: NextRequest) {
 
   // cursor(마지막으로 받은 id) 다음 항목부터 limit 개를 자른다.
   const startIndex = ALL_ITEMS.findIndex((item) => item.id > cursor);
-  const items =
-    startIndex === -1 ? [] : ALL_ITEMS.slice(startIndex, startIndex + limit);
+  const items = startIndex === -1 ? [] : ALL_ITEMS.slice(startIndex, startIndex + limit);
 
   // 마지막까지 다 줬으면 nextCursor 는 null — 클라이언트는 이걸로 hasMore 를 판단한다.
   const lastItem = items[items.length - 1];

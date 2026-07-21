@@ -19,9 +19,7 @@ export function ItemCard({ item }: { item: Item }) {
         </span>
         <h2 className="font-medium">{item.title}</h2>
       </div>
-      <p className="text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
-        {item.body}
-      </p>
+      <p className="text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">{item.body}</p>
     </li>
   );
 }

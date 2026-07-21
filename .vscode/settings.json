@@ -1,0 +1,23 @@
+{
+  // 저장할 때마다 Prettier 로 자동 포맷한다.
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // 언어별로도 명시해 둔다 — 다른 확장이 기본 포맷터를 가로채는 걸 방지.
+  "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[javascriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[css]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[markdown]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+
+  // 역할 분담: 서식은 Prettier, 코드 품질(미사용 변수 등)은 ESLint 가 저장 시 자동 수정.
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+
+  // 프로젝트에 설치된 TypeScript 버전을 사용한다 (VS Code 내장 버전과 어긋나지 않게).
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
