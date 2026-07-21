@@ -1,0 +1,9 @@
+# 빌드 산출물 / 자동 생성 파일은 포맷 대상이 아니다.
+.next/
+out/
+build/
+node_modules/
+next-env.d.ts
+
+# 락파일은 패키지 매니저가 관리한다.
+package-lock.json
